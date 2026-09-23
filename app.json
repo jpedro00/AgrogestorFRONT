@@ -1,0 +1,21 @@
+{
+  "expo": {
+    "name": "AgroGestor",
+    "slug": "agrogestor",
+    "version": "0.1.0",
+    "scheme": "agrogestor",
+    "userInterfaceStyle": "light",
+    "plugins": ["expo-router", "expo-font"],
+    "web": {
+      "bundler": "metro",
+      "output": "single",
+      "name": "AgroGestor"
+    },
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "package": "com.agrogestor.prototype"
+    }
+  }
+}

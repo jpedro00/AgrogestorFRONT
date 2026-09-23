@@ -1,0 +1,11 @@
+node_modules/
+.expo/
+dist/
+dist-native/
+coverage/
+test-results/
+test-results-modules/
+playwright-report/
+*.log
+.env*
+expo-env.d.ts
