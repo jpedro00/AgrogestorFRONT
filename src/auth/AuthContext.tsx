@@ -7,14 +7,30 @@ import {
   type PropsWithChildren,
 } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { AppState, Platform } from "react-native";
 import { MockAuthService } from "../services/auth";
+import { LiveAuthService } from "../services/liveAuth";
+import {
+  hasAuthConfiguration,
+  requireSupabase,
+  supabase,
+} from "../services/supabase";
+import { toAppUser, type RegistrationInput } from "../services/registration";
 import type { User } from "../types/domain";
-export const authService = new MockAuthService(AsyncStorage);
+export const isDemoMode = !hasAuthConfiguration;
+export const authService = supabase
+  ? new LiveAuthService(supabase)
+  : new MockAuthService(AsyncStorage);
+async function restoreUser() {
+  if (hasAuthConfiguration) requireSupabase();
+  return authService.restore();
+}
 type AuthContextValue = {
   user: User | null;
   loading: boolean;
   error: string | null;
   login: (email: string, password: string) => Promise<User>;
+  register: (input: RegistrationInput) => Promise<{ user: User | null }>;
   logout: () => Promise<void>;
   restore: () => Promise<void>;
 };
@@ -27,7 +43,7 @@ export function AuthProvider({ children }: PropsWithChildren) {
     setLoading(true);
     setError(null);
     try {
-      setUser(await authService.restore());
+      setUser(await restoreUser());
     } catch {
       setUser(null);
       setError("Não foi possível recuperar sua sessão. Tente novamente.");
@@ -37,8 +53,7 @@ export function AuthProvider({ children }: PropsWithChildren) {
   }, []);
   useEffect(() => {
     let active = true;
-    authService
-      .restore()
+    restoreUser()
       .then((value) => {
         if (active) setUser(value);
       })
@@ -53,10 +68,44 @@ export function AuthProvider({ children }: PropsWithChildren) {
       active = false;
     };
   }, []);
+  useEffect(() => {
+    if (!supabase) return;
+    const client = supabase;
+    const { data } = client.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ? toAppUser(session.user) : null);
+    });
+    if (Platform.OS !== "web" && AppState.currentState === "active")
+      client.auth.startAutoRefresh();
+    const subscription =
+      Platform.OS !== "web"
+        ? AppState.addEventListener("change", (state) => {
+            if (state === "active") client.auth.startAutoRefresh();
+            else client.auth.stopAutoRefresh();
+          })
+        : null;
+    return () => {
+      data.subscription.unsubscribe();
+      subscription?.remove();
+    };
+  }, []);
   async function login(email: string, password: string) {
+    if (hasAuthConfiguration) requireSupabase();
     const result = await authService.login(email, password);
     setError(null);
     setUser(result);
+    return result;
+  }
+  async function register(input: RegistrationInput) {
+    const redirect =
+      Platform.OS === "web" && typeof window !== "undefined"
+        ? `${window.location.origin}/login`
+        : process.env.EXPO_PUBLIC_AUTH_REDIRECT_URL;
+    const result = await new LiveAuthService(requireSupabase()).register(
+      input,
+      redirect,
+    );
+    setError(null);
+    if (result.user) setUser(result.user);
     return result;
   }
   async function logout() {
@@ -70,7 +119,7 @@ export function AuthProvider({ children }: PropsWithChildren) {
   }
   return (
     <AuthContext.Provider
-      value={{ user, loading, error, login, logout, restore }}
+      value={{ user, loading, error, login, register, logout, restore }}
     >
       {children}
     </AuthContext.Provider>

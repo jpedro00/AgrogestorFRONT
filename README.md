@@ -1,7 +1,42 @@
-# AgroGestor — fundação frontend
+# AgroGestor
+
+Estado atual e resultados de validação: [status do projeto](docs/STATUS.md).
+
+## Cadastro e autenticação Supabase
+
+A rota `/cadastro` permite informar nome, e-mail, senha e confirmação. A integração
+usa Supabase Auth, com confirmação de e-mail conforme configuração do projeto,
+login, restauração de sessão e logout. Senhas não são gravadas pelo aplicativo.
+
+Para conectar o banco AgroGestor, copie `.env.example` para `.env.local` e preencha
+`EXPO_PUBLIC_SUPABASE_URL` e `EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY` com a URL e a
+chave **pública** do projeto `cijujvueodmjifvlqfxm`. Nunca use chave secret/service_role,
+senha PostgreSQL ou JWT secret no frontend. Reinicie o Expo após alterar o ambiente.
+
+No Supabase, habilite o provedor Email, configure Site URL/Redirect URLs para o
+endereço da aplicação e o envio de mensagens de confirmação. Confirme o e-mail e
+retorne ao login. A confirmação pelo navegador pode usar a sessão do link; no
+mobile, confirme pelo navegador e entre no app com e-mail/senha.
+
+Sem as duas variáveis, o cadastro mostra indisponibilidade. Quando ambas estão
+ausentes, o login original de demonstração continua disponível. Uma configuração
+parcial não habilita login de demonstração silenciosamente.
+
+Novas contas recebem o perfil básico de proprietário/vendedor, sem vínculos de
+propriedade. Apenas `app_metadata.role`, administrado no servidor, pode mudar o
+papel; `user_metadata` contém somente dados de apresentação. Isso prepara a UI,
+mas os futuros dados de negócio ainda precisam de tabelas e RLS no servidor.
+
+O cadastro é persistido pelo próprio Supabase Auth em `auth.users`. Não é preciso
+criar uma tabela pública nem armazenar senhas em tabelas próprias nesta etapa.
+
+Diagnóstico, plano e pendências: [cadastro e requisitos](docs/CADASTRO-E-REQUISITOS.md).
+
+## Fundação original de demonstração
 
 Primeiro protótipo funcional para gestão rural e Mercado Rural. Todo dado é fictício.
-Não há backend, banco de dados, autenticação segura, pagamentos ou integrações de produção.
+Os módulos de negócio continuam usando dados simulados. A autenticação real depende
+da configuração Supabase acima; pagamentos e módulos de produção ainda não existem.
 
 ## Iniciar
 
@@ -62,7 +97,8 @@ essencial de módulos, sem estoque e histórico gerencial.
 | Público | `/` | Landing |
 | Público | `/mercado` | Mercado com busca e categorias |
 | Público | `/oportunidade/:id` | Detalhes e ações mock |
-| Auth | `/login` | Login de demonstração |
+| Auth | `/login` | Login Supabase ou demonstração, conforme ambiente |
+| Auth | `/cadastro` | Cadastro por Supabase Auth |
 | Usuário | `/usuario` | Página de entrada autenticada |
 | Usuário | `/home` | Dashboard e quatro acessos |
 | Usuário | `/fazenda` | Shell da gestão rural |
@@ -131,6 +167,10 @@ das telas principais são salvas em `docs/screenshots`.
 
 `build` gera `dist` local. `build:mobile` gera bundles JS/Hermes em `dist-native`;
 não gera APK/IPA e não comprova execução em aparelho. Nenhum comando faz deploy.
+
+Os testes de demonstração usam a porta 8082 com ambiente isolado. Para a
+validação opt-in da autenticação real, use `npm run test:e2e:live`; os detalhes
+da conta temporária estão em `docs/CADASTRO-E-REQUISITOS.md`.
 
 ## Limites da fase
 

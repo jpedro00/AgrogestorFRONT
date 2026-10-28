@@ -5,7 +5,9 @@ dist-native/
 coverage/
 test-results/
 test-results-modules/
+test-results-live/
 playwright-report/
 *.log
 .env*
+!.env.example
 expo-env.d.ts

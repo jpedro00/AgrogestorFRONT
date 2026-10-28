@@ -53,7 +53,9 @@ export default function UserEntryScreen() {
         )}
         <AccountDetail
           label="Status da conta"
-          value="Ativa · conta de demonstração"
+          value={
+            user.status === "demo" ? "Ativa · conta de demonstração" : "Ativa"
+          }
         />
         <Text style={s.body}>
           Seu espaço para acompanhar a rotina e encontrar novas possibilidades

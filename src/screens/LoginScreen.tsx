@@ -5,7 +5,7 @@ import { Screen } from "../components/Layout";
 import { AppButton, AppInput, Badge, Card, Heading, s } from "../components/ui";
 import { ErrorState, LoadingState } from "../components/States";
 import { RuralArt } from "../components/RuralArt";
-import { authService, useAuth } from "../auth/AuthContext";
+import { authService, isDemoMode, useAuth } from "../auth/AuthContext";
 import { entryRoute, roleLabels } from "../auth/permissions";
 import { colors as c } from "../theme";
 export default function LoginScreen() {
@@ -78,15 +78,25 @@ export default function LoginScreen() {
             padding: width < 500 ? 22 : 32,
           }}
         >
-          <Heading subtitle="Acesse sua conta de demonstração.">
+          <Heading
+            subtitle={
+              isDemoMode
+                ? "Acesse sua conta de demonstração."
+                : "Acesse sua conta."
+            }
+          >
             Entrar no AgroGestor
           </Heading>
-          <Badge label="AMBIENTE DE DEMONSTRAÇÃO" tone="warning" />
+          {isDemoMode && (
+            <Badge label="AMBIENTE DE DEMONSTRAÇÃO" tone="warning" />
+          )}
           <AppInput
             label="E-mail"
             value={email}
             onChangeText={setEmail}
-            placeholder="usuario@agrogestor.demo"
+            placeholder={
+              isDemoMode ? "usuario@agrogestor.demo" : "voce@exemplo.com"
+            }
             keyboardType="email-address"
             autoCapitalize="none"
             autoCorrect={false}
@@ -94,12 +104,12 @@ export default function LoginScreen() {
             editable={!busy}
           />
           <AppInput
-            label="Senha de demonstração"
+            label={isDemoMode ? "Senha de demonstração" : "Senha"}
             value={password}
             onChangeText={setPassword}
-            placeholder="Digite a senha demo"
+            placeholder="Digite sua senha"
             secureTextEntry
-            autoComplete="off"
+            autoComplete="current-password"
             editable={!busy}
             onSubmitEditing={() => void submit()}
           />
@@ -113,35 +123,43 @@ export default function LoginScreen() {
             onPress={() => void submit()}
             icon="arrow-forward"
           />
-          <View
-            style={{
-              gap: 10,
-              borderTopWidth: 1,
-              borderColor: c.border,
-              paddingTop: 20,
-            }}
-          >
-            <Text style={[s.body, { fontWeight: "600", color: c.text }]}>
-              Experimente um perfil
-            </Text>
-            <Text style={s.small}>
-              Senha pública de demonstração: Demo@123{"\n"}Não utilize
-              credenciais reais. Este login não é seguro.
-            </Text>
-            {authService.listDemoAccounts().map((account) => (
-              <AppButton
-                key={account.email}
-                title={roleLabels[account.role]}
-                variant="secondary"
-                onPress={() => {
-                  setEmail(account.email);
-                  setPassword("Demo@123");
-                  setError("");
-                }}
-                disabled={busy}
-              />
-            ))}
-          </View>
+          <AppButton
+            title="Criar minha conta"
+            variant="secondary"
+            onPress={() => router.push("/cadastro")}
+            disabled={busy}
+          />
+          {isDemoMode && (
+            <View
+              style={{
+                gap: 10,
+                borderTopWidth: 1,
+                borderColor: c.border,
+                paddingTop: 20,
+              }}
+            >
+              <Text style={[s.body, { fontWeight: "600", color: c.text }]}>
+                Experimente um perfil
+              </Text>
+              <Text style={s.small}>
+                Senha pública de demonstração: Demo@123{"\n"}Não utilize
+                credenciais reais. Este login não é seguro.
+              </Text>
+              {authService.listDemoAccounts().map((account) => (
+                <AppButton
+                  key={account.email}
+                  title={roleLabels[account.role]}
+                  variant="secondary"
+                  onPress={() => {
+                    setEmail(account.email);
+                    setPassword("Demo@123");
+                    setError("");
+                  }}
+                  disabled={busy}
+                />
+              ))}
+            </View>
+          )}
           <AppButton
             title="Voltar à página inicial"
             variant="ghost"

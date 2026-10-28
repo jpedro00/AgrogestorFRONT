@@ -49,7 +49,12 @@ export default function ProfileScreen() {
               value={resource.data?.name ?? "Sem propriedade vinculada"}
             />
           )}
-          <AccountDetail label="Conta" value="Demonstração · ativa" />
+          <AccountDetail
+            label="Conta"
+            value={
+              user.status === "demo" ? "Demonstração · ativa" : "Conta ativa"
+            }
+          />
           <LogoutButton />
         </Card>
         <Card style={{ flex: 1, minWidth: 260, gap: 24 }}>

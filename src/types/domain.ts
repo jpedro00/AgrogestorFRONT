@@ -13,7 +13,7 @@ export interface User {
   email: string;
   role: Role;
   propertyIds: string[];
-  status: "demo";
+  status: "demo" | "active";
 }
 export interface Property {
   id: string;

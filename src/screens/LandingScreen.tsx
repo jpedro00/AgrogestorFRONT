@@ -49,6 +49,12 @@ export default function LandingScreen() {
               onPress={() => router.push("/login")}
             />
             <AppButton
+              title="Criar minha conta"
+              icon="person-add-outline"
+              variant="secondary"
+              onPress={() => router.push("/cadastro")}
+            />
+            <AppButton
               title="Explorar Mercado Rural"
               icon="storefront-outline"
               variant="secondary"

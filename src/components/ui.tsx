@@ -30,6 +30,7 @@ export function AppButton({
   variant = "primary",
   icon,
   loading,
+  loadingLabel = "Entrando…",
   disabled,
   accessibilityLabel,
 }: {
@@ -38,6 +39,7 @@ export function AppButton({
   variant?: "primary" | "secondary" | "ghost" | "danger";
   icon?: IconName;
   loading?: boolean;
+  loadingLabel?: string;
   disabled?: boolean;
   accessibilityLabel?: string;
 }) {
@@ -71,7 +73,7 @@ export function AppButton({
         <Icon name={icon} color={fg} size={19} />
       ) : null}
       <Text style={[s.buttonText, { color: fg }]}>
-        {loading ? "Entrando…" : title}
+        {loading ? loadingLabel : title}
       </Text>
     </Pressable>
   );
