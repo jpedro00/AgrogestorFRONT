@@ -2,6 +2,7 @@ import { Text, View } from "react-native";
 import { FieldMotion } from "./FieldMotion";
 import { colors as c } from "../theme";
 import { s } from "./ui";
+import { RuralPhoto } from "./RuralPhoto";
 
 export function FieldBanner({
   title,
@@ -23,6 +24,9 @@ export function FieldBanner({
         justifyContent: "center",
       }}
     >
+      <View style={{ position: "absolute", inset: 0, opacity: 0.18 }}>
+        <RuralPhoto variant="lease" />
+      </View>
       <FieldMotion />
       <View style={{ gap: 10, maxWidth: 540 }}>
         <Text style={[s.eyebrow, { color: c.accent }]}>{label}</Text>

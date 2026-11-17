@@ -29,9 +29,10 @@ export function FieldMotion() {
       canvas.style.cssText = "display:block;width:100%;height:100%";
       element!.appendChild(canvas);
       const scene = new THREE.Scene();
-      const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 2);
-      camera.position.z = 1;
-      const geometry = new THREE.PlaneGeometry(2, 2);
+      const camera = new THREE.PerspectiveCamera(48, 1, 0.1, 30);
+      camera.position.set(0, -2.4, 4);
+      camera.lookAt(0, 0, 0);
+      const geometry = new THREE.PlaneGeometry(12, 8, 100, 70);
       const uniforms = {
         time: { value: 0 },
         aspect: { value: 1 },
@@ -41,7 +42,16 @@ export function FieldMotion() {
         transparent: true,
         uniforms,
         vertexShader: `varying vec2 vUv;
-          void main() { vUv = uv; gl_Position = vec4(position, 1.0); }`,
+          uniform float time;
+          uniform vec2 pointer;
+          void main() {
+            vUv = uv;
+            vec3 p = position;
+            p.z = sin(p.x * 1.2 + time * 0.15) * 0.25
+              + cos(p.y * 1.8 + p.x * 0.4) * 0.18;
+            p.x += pointer.x * 0.12;
+            gl_Position = projectionMatrix * modelViewMatrix * vec4(p, 1.0);
+          }`,
         fragmentShader: `
           varying vec2 vUv;
           uniform float time;
@@ -84,6 +94,8 @@ export function FieldMotion() {
         const { width, height } = entry.contentRect;
         if (!width || !height) return;
         uniforms.aspect.value = width / height;
+        camera.aspect = width / height;
+        camera.updateProjectionMatrix();
         renderer.setSize(width, height, false);
         refresh();
       });

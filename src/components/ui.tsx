@@ -247,7 +247,7 @@ export const s = StyleSheet.create({
     minHeight: 48,
     paddingHorizontal: 18,
     paddingVertical: 12,
-    borderRadius: radius.sm,
+    borderRadius: 14,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
@@ -270,7 +270,7 @@ export const s = StyleSheet.create({
     backgroundColor: c.surface,
     borderWidth: 1,
     borderColor: c.border,
-    borderRadius: radius.md,
+    borderRadius: 20,
   },
   badge: {
     alignSelf: "flex-start",
