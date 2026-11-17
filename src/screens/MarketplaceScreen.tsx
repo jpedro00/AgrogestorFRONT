@@ -5,7 +5,7 @@ import { Screen } from "../components/Layout";
 import { AppButton, AppInput, Badge, Card, Heading, s } from "../components/ui";
 import { EmptyState, ErrorState, LoadingState } from "../components/States";
 import { OpportunityCard } from "../components/OpportunityCard";
-import { RuralArt } from "../components/RuralArt";
+import { RuralPhoto } from "../components/RuralPhoto";
 import { MarketplaceService } from "../services/data";
 import { useResource } from "../hooks/useResource";
 import { useAuth } from "../auth/AuthContext";
@@ -145,7 +145,7 @@ export function OpportunityScreen() {
                 overflow: "hidden",
               }}
             >
-              <RuralArt variant={item.art} />
+              <RuralPhoto variant={item.art} />
             </View>
             <Card style={{ flex: 1, gap: 22 }}>
               <Badge label="OPORTUNIDADE DE DEMONSTRAÇÃO" tone="warning" />

@@ -145,8 +145,16 @@ docs/                   Plano, relatório, inventário e capturas
 ```
 
 As telas consomem serviços; os serviços recebem mocks. O catálogo público não
-deriva do cadastro privado da fazenda. A ilustração vetorial `RuralArt` está
-embutida no aplicativo; não depende de serviço remoto de imagens.
+deriva do cadastro privado da fazenda. As fotografias ilustrativas são distribuídas com o aplicativo em
+`assets/photos`. As imagens do catálogo representam as categorias dos anúncios fictícios.
+
+Fotografias do [Pexels](https://www.pexels.com/license/):
+
+- [Campos de São Simão](https://www.pexels.com/photo/31329145/), Clodoaldo Franco.
+- [Propriedade em Barra do Turvo](https://www.pexels.com/photo/17086468/), Threze Gue.
+- [Gado Nelore em Porto Feliz](https://www.pexels.com/photo/31026897/), Matheus Lara.
+- [Espiga de milho](https://www.pexels.com/photo/35072884/), Valentin Ivantsov.
+- [Área rural de Maringá](https://www.pexels.com/photo/14515234/), Vidal Balielo Jr.
 
 ## Verificações
 

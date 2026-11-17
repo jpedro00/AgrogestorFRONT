@@ -1,6 +1,6 @@
 import { Text, View } from "react-native";
 import type { Opportunity } from "../types/domain";
-import { RuralArt } from "./RuralArt";
+import { RuralPhoto } from "./RuralPhoto";
 import { AppButton, Badge, Icon, s } from "./ui";
 import { colors as c } from "../theme";
 export function OpportunityCard({
@@ -28,7 +28,7 @@ export function OpportunityCard({
       }}
     >
       <View style={{ height: 180 }}>
-        <RuralArt variant={item.art} />
+        <RuralPhoto variant={item.art} />
         <View style={{ position: "absolute", left: 14, top: 14 }}>
           <Badge label={item.category} />
         </View>

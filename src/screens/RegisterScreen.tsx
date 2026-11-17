@@ -4,7 +4,7 @@ import { Redirect, router } from "expo-router";
 import { Screen } from "../components/Layout";
 import { AppButton, AppInput, Badge, Card, Heading, s } from "../components/ui";
 import { ErrorState, LoadingState } from "../components/States";
-import { RuralArt } from "../components/RuralArt";
+import { RuralPhoto } from "../components/RuralPhoto";
 import { useAuth } from "../auth/AuthContext";
 import { entryRoute } from "../auth/permissions";
 import { supabase } from "../services/supabase";
@@ -75,7 +75,7 @@ export default function RegisterScreen() {
               Um novo começo para sua gestão.
             </Heading>
             <View style={{ height: 310, borderRadius: 20, overflow: "hidden" }}>
-              <RuralArt />
+              <RuralPhoto variant="lease" />
             </View>
             <Text style={s.body}>
               Sua conta é pessoal. O acesso a propriedades e equipes será

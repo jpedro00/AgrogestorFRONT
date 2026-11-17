@@ -4,7 +4,7 @@ import { Redirect, router } from "expo-router";
 import { Screen } from "../components/Layout";
 import { AppButton, AppInput, Badge, Card, Heading, s } from "../components/ui";
 import { ErrorState, LoadingState } from "../components/States";
-import { RuralArt } from "../components/RuralArt";
+import { RuralPhoto } from "../components/RuralPhoto";
 import { authService, isDemoMode, useAuth } from "../auth/AuthContext";
 import { entryRoute, roleLabels } from "../auth/permissions";
 import { colors as c } from "../theme";
@@ -62,7 +62,7 @@ export default function LoginScreen() {
               Bom ter você por aqui.
             </Heading>
             <View style={{ height: 310, borderRadius: 20, overflow: "hidden" }}>
-              <RuralArt />
+              <RuralPhoto variant="land" />
             </View>
             <Text style={s.body}>
               Gestão rural e oportunidades, cada uma com seu espaço.

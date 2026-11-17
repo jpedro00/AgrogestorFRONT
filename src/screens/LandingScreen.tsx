@@ -2,7 +2,7 @@ import { Text, View, useWindowDimensions } from "react-native";
 import { router } from "expo-router";
 import { Screen } from "../components/Layout";
 import { AppButton, Badge, Icon, s } from "../components/ui";
-import { RuralArt } from "../components/RuralArt";
+import { RuralPhoto } from "../components/RuralPhoto";
 import { colors as c } from "../theme";
 export default function LandingScreen() {
   const { width } = useWindowDimensions();
@@ -74,7 +74,7 @@ export default function LandingScreen() {
               overflow: "hidden",
             }}
           >
-            <RuralArt />
+            <RuralPhoto />
           </View>
           <View
             style={{
