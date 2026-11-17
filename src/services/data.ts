@@ -2,6 +2,7 @@ import { canAccess } from "../auth/permissions";
 import { properties, alerts } from "../mocks/properties";
 import { activities, summary, adminSummary } from "../mocks/dashboard";
 import { opportunities } from "../mocks/opportunities";
+import { harvests, herds } from "../mocks/production";
 import { negotiations, negotiationStatuses } from "../mocks/negotiations";
 import type { User } from "../types/domain";
 export const PropertyService = {
@@ -33,6 +34,19 @@ export const MarketplaceService = {
   },
   async get(id: string) {
     return opportunities.find((o) => o.id === id) ?? null;
+  },
+};
+export const ProductionService = {
+  async list(user: User) {
+    const property = await PropertyService.selected(user);
+    return {
+      harvests: harvests
+        .filter((item) => item.propertyId === property?.id)
+        .map((item) => ({ ...item })),
+      herds: herds
+        .filter((item) => item.propertyId === property?.id)
+        .map((item) => ({ ...item })),
+    };
   },
 };
 export const NegotiationService = {

@@ -8,6 +8,7 @@ import {
   Card,
   Heading,
   Icon,
+  ModuleCard,
   QuickActionCard,
   SectionTitle,
   StatCard,
@@ -20,6 +21,7 @@ import { useResource } from "../hooks/useResource";
 import { DashboardService } from "../services/data";
 import { quickActions } from "../navigation/modules";
 import { colors as c } from "../theme";
+import { FieldBanner } from "../components/FieldBanner";
 export default function HomeScreen() {
   const { user } = useAuth();
   const { simplified, assisted } = useExperience();
@@ -142,92 +144,115 @@ export default function HomeScreen() {
         </View>
       </View>
       {data && (
-        <View
-          style={{ flexDirection: width > 900 ? "row" : "column", gap: 24 }}
-        >
-          <Card style={{ flex: 1.6, gap: 22 }}>
-            <View style={[s.between, { flexWrap: "wrap" }]}>
-              <SectionTitle>Próximas atividades</SectionTitle>
-              <Badge label="Sua agenda no campo" tone="neutral" />
-            </View>
-            {data.activities.map((activity, index) => (
-              <View
-                key={activity.id}
-                style={[
-                  s.row,
-                  {
-                    alignItems: "flex-start",
-                    paddingTop: index ? 18 : 0,
-                    borderTopWidth: index ? 1 : 0,
-                    borderColor: c.border,
-                  },
-                ]}
-              >
-                <View style={s.iconBox}>
-                  <Icon
-                    name={
-                      activity.kind === "attention"
-                        ? "leaf-outline"
-                        : "calendar-outline"
-                    }
-                    size={21}
-                  />
-                </View>
-                <View style={{ flex: 1, gap: 5 }}>
-                  <Text style={s.label}>{activity.title}</Text>
-                  <Text style={s.small}>{activity.plot}</Text>
-                  <Text
-                    style={[
-                      s.small,
-                      {
-                        color:
-                          activity.kind === "attention" ? c.warning : c.primary,
-                        fontWeight: "600",
-                      },
-                    ]}
-                  >
-                    {activity.scheduledLabel}
-                  </Text>
-                </View>
-                <Icon name="chevron-forward" size={16} color={c.muted} />
-              </View>
-            ))}
-            <AppButton
-              title="Ver atividades"
-              variant="secondary"
-              onPress={() => router.push("/fazenda/atividades")}
+        <>
+          <FieldBanner
+            label="SUA PRODUÇÃO"
+            title="Um olhar para cada ciclo."
+            description="Consulte os exemplos de safras e rebanhos para acompanhar a propriedade de perto."
+          />
+          <View style={s.grid}>
+            <ModuleCard
+              title="Culturas e Safras"
+              description="Soja, milho, café e mais quatro culturas. Explore três safras."
+              icon="leaf-outline"
+              onPress={() => router.push("/fazenda/culturas")}
             />
-          </Card>
-          <Card
-            style={{
-              flex: 1,
-              backgroundColor: c.primaryDark,
-              gap: 20,
-              justifyContent: "center",
-            }}
+            <ModuleCard
+              title="Rebanhos e Raças"
+              description="Sete raças, lotes de corte e leite, cria, recria e engorda."
+              icon="paw-outline"
+              onPress={() => router.push("/fazenda/rebanhos")}
+            />
+          </View>
+          <View
+            style={{ flexDirection: width > 900 ? "row" : "column", gap: 24 }}
           >
-            <Icon name="sunny-outline" color={c.accent} size={32} />
-            <Text
+            <Card style={{ flex: 1.6, gap: 22 }}>
+              <View style={[s.between, { flexWrap: "wrap" }]}>
+                <SectionTitle>Próximas atividades</SectionTitle>
+                <Badge label="Sua agenda no campo" tone="neutral" />
+              </View>
+              {data.activities.map((activity, index) => (
+                <View
+                  key={activity.id}
+                  style={[
+                    s.row,
+                    {
+                      alignItems: "flex-start",
+                      paddingTop: index ? 18 : 0,
+                      borderTopWidth: index ? 1 : 0,
+                      borderColor: c.border,
+                    },
+                  ]}
+                >
+                  <View style={s.iconBox}>
+                    <Icon
+                      name={
+                        activity.kind === "attention"
+                          ? "leaf-outline"
+                          : "calendar-outline"
+                      }
+                      size={21}
+                    />
+                  </View>
+                  <View style={{ flex: 1, gap: 5 }}>
+                    <Text style={s.label}>{activity.title}</Text>
+                    <Text style={s.small}>{activity.plot}</Text>
+                    <Text
+                      style={[
+                        s.small,
+                        {
+                          color:
+                            activity.kind === "attention"
+                              ? c.warning
+                              : c.primary,
+                          fontWeight: "600",
+                        },
+                      ]}
+                    >
+                      {activity.scheduledLabel}
+                    </Text>
+                  </View>
+                  <Icon name="chevron-forward" size={16} color={c.muted} />
+                </View>
+              ))}
+              <AppButton
+                title="Ver atividades"
+                variant="secondary"
+                onPress={() => router.push("/fazenda/atividades")}
+              />
+            </Card>
+            <Card
               style={{
-                color: c.surface,
-                fontSize: 25,
-                lineHeight: 33,
-                fontWeight: "600",
+                flex: 1,
+                backgroundColor: c.primaryDark,
+                gap: 20,
+                justifyContent: "center",
               }}
             >
-              Um bom dia começa com um bom planejamento.
-            </Text>
-            <Text style={{ color: c.accent, fontSize: 15, lineHeight: 24 }}>
-              Acompanhe sua propriedade, organize as atividades e dê o próximo
-              passo com mais clareza.
-            </Text>
-            <AppButton
-              title="Cuidar da minha fazenda"
-              variant="secondary"
-              onPress={() => router.push("/fazenda")}
-            />
-          </Card>
-        </View>
+              <Icon name="sunny-outline" color={c.accent} size={32} />
+              <Text
+                style={{
+                  color: c.surface,
+                  fontSize: 25,
+                  lineHeight: 33,
+                  fontWeight: "600",
+                }}
+              >
+                Um bom dia começa com um bom planejamento.
+              </Text>
+              <Text style={{ color: c.accent, fontSize: 15, lineHeight: 24 }}>
+                Acompanhe sua propriedade, organize as atividades e dê o próximo
+                passo com mais clareza.
+              </Text>
+              <AppButton
+                title="Cuidar da minha fazenda"
+                variant="secondary"
+                onPress={() => router.push("/fazenda")}
+              />
+            </Card>
+          </View>
+        </>
       )}
     </Screen>
   );

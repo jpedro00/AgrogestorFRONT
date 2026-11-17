@@ -35,6 +35,15 @@ export function OpportunityCard({
       </View>
       <View style={{ padding: 20, gap: 14 }}>
         <Text style={s.cardTitle}>{item.title}</Text>
+        {(item.breed || item.season) && (
+          <View style={[s.row, { flexWrap: "wrap", gap: 6 }]}>
+            {!!item.breed && <Badge label={item.breed} />}
+            {!!item.purpose && <Badge label={item.purpose} tone="neutral" />}
+            {!!item.season && (
+              <Badge label={`Safra ${item.season}`} tone="neutral" />
+            )}
+          </View>
+        )}
         <View style={[s.row, { gap: 6 }]}>
           <Icon name="location-outline" size={15} color={c.muted} />
           <Text style={[s.small, { flex: 1 }]}>{item.location}</Text>

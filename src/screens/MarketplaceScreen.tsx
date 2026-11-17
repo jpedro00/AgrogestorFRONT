@@ -10,6 +10,8 @@ import { MarketplaceService } from "../services/data";
 import { useResource } from "../hooks/useResource";
 import { useAuth } from "../auth/AuthContext";
 import { useMarketplace } from "../contexts/MarketplaceContext";
+import { FilterChips } from "../components/FilterChips";
+import { FieldBanner } from "../components/FieldBanner";
 export default function MarketplaceScreen({
   privateArea = false,
 }: {
@@ -20,30 +22,37 @@ export default function MarketplaceScreen({
   const resource = useResource(MarketplaceService.list);
   const [category, setCategory] = useState("Todas");
   const [search, setSearch] = useState("");
+  const [breed, setBreed] = useState("Todas");
+  const [crop, setCrop] = useState("Todas");
+  const [season, setSeason] = useState("Todas");
+  const [purpose, setPurpose] = useState("Todas");
   const filtered = resource.data?.filter(
     (item) =>
       (category === "Todas" ||
         (category === "Favoritos" && favorites.includes(item.id)) ||
         item.category === category) &&
-      `${item.title} ${item.location}`
+      (breed === "Todas" || item.breed === breed) &&
+      (crop === "Todas" || item.crop === crop) &&
+      (season === "Todas" || item.season === season) &&
+      (purpose === "Todas" || item.purpose === purpose) &&
+      `${item.title} ${item.location} ${item.breed ?? ""} ${item.crop ?? ""} ${item.season ?? ""} ${item.purpose ?? ""} ${item.summary}`
         .toLocaleLowerCase("pt-BR")
-        .includes(search.toLocaleLowerCase("pt-BR")),
+        .includes(search.trim().toLocaleLowerCase("pt-BR")),
   );
   return (
     <Screen publicArea={!privateArea} userNav={privateArea}>
-      <Heading
-        eyebrow="AGROGESTOR NEGÓCIOS"
-        subtitle="Novas conexões. Boas oportunidades. Um campo de possibilidades."
-      >
-        Mercado Rural
-      </Heading>
+      <FieldBanner
+        label="AGROGESTOR NEGÓCIOS"
+        title="Mercado Rural"
+        description="Explore terras, raças e safras. Encontre os exemplos que combinam com o seu próximo passo."
+      />
       <Text style={s.body}>
         Catálogo público de demonstração. Anúncios e valores fictícios, sem
         vínculo automático com os dados privados da sua fazenda.
       </Text>
       <AppInput
         label="Buscar oportunidades"
-        placeholder="Busque por título ou região"
+        placeholder="Busque por cultura, raça, safra ou região"
         value={search}
         onChangeText={setSearch}
       />
@@ -60,10 +69,75 @@ export default function MarketplaceScreen({
             key={value}
             title={value}
             variant={category === value ? "primary" : "secondary"}
-            onPress={() => setCategory(value)}
+            selected={category === value}
+            onPress={() => {
+              setCategory(value);
+              setBreed("Todas");
+              setCrop("Todas");
+              setSeason("Todas");
+              setPurpose("Todas");
+            }}
           />
         ))}
       </View>
+      {category === "Gado" && (
+        <Card style={{ gap: 18 }}>
+          <FilterChips
+            label="Raça"
+            values={[
+              "Todas",
+              ...new Set(
+                resource.data?.flatMap((item) =>
+                  item.breed ? [item.breed] : [],
+                ) ?? [],
+              ),
+            ]}
+            value={breed}
+            onChange={setBreed}
+          />
+          <FilterChips
+            label="Finalidade"
+            values={["Todas", "Corte", "Leite"]}
+            value={purpose}
+            onChange={setPurpose}
+          />
+        </Card>
+      )}
+      {category === "Produção agrícola" && (
+        <Card style={{ gap: 18 }}>
+          <FilterChips
+            label="Cultura"
+            values={[
+              "Todas",
+              ...new Set(
+                resource.data?.flatMap((item) =>
+                  item.crop ? [item.crop] : [],
+                ) ?? [],
+              ),
+            ]}
+            value={crop}
+            onChange={setCrop}
+          />
+          <FilterChips
+            label="Safra"
+            values={[
+              "Todas",
+              ...new Set(
+                resource.data?.flatMap((item) =>
+                  item.season ? [item.season] : [],
+                ) ?? [],
+              ),
+            ]}
+            value={season}
+            onChange={setSeason}
+          />
+        </Card>
+      )}
+      {!resource.loading && !resource.error && (
+        <Text accessibilityLiveRegion="polite" style={s.small}>
+          {filtered?.length ?? 0} oportunidades encontradas
+        </Text>
+      )}
       {resource.loading ? (
         <LoadingState />
       ) : resource.error ? (
@@ -151,6 +225,16 @@ export function OpportunityScreen() {
               <Badge label="OPORTUNIDADE DE DEMONSTRAÇÃO" tone="warning" />
               <Text style={s.stat}>{item.price}</Text>
               <Text style={s.sectionTitle}>{item.summary}</Text>
+              <View style={s.grid}>
+                {!!item.breed && <Badge label={item.breed} />}
+                {!!item.purpose && (
+                  <Badge label={item.purpose} tone="neutral" />
+                )}
+                {!!item.crop && <Badge label={item.crop} />}
+                {!!item.season && (
+                  <Badge label={`Safra ${item.season}`} tone="neutral" />
+                )}
+              </View>
               <Text style={s.body}>{item.description}</Text>
               <AppButton
                 title="Manifestar interesse"

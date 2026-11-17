@@ -155,6 +155,29 @@ Fotografias do [Pexels](https://www.pexels.com/license/):
 - [Gado Nelore em Porto Feliz](https://www.pexels.com/photo/31026897/), Matheus Lara.
 - [Espiga de milho](https://www.pexels.com/photo/35072884/), Valentin Ivantsov.
 - [Área rural de Maringá](https://www.pexels.com/photo/14515234/), Vidal Balielo Jr.
+- [Lavoura de soja](https://www.pexels.com/photo/38740388/), Clinton Weaver.
+- [Frutos de café](https://www.pexels.com/photo/1556665/), Daniel Reche.
+- [Angus](https://www.pexels.com/photo/11556841/), Fernando Mamberti.
+- [Holandês](https://www.pexels.com/photo/7115025/), Mark Stebnicki.
+
+## Exemplos de produção e visual dinâmico
+
+Minha Fazenda e o menu administrativo incluem **Culturas e Safras** e
+**Rebanhos e Raças**. Os exemplos apresentam sete culturas em três safras
+(2025/26, 2026/27 e 2027/28), além de sete lotes de raças de corte e leite.
+Os filtros atualizam os cartões e os totais. Selecione um cartão para abrir
+os detalhes. Os dados são fictícios e consultados conforme o vínculo do
+perfil de demonstração com a propriedade.
+
+O Mercado Rural apresenta oito anúncios, com busca por cultura, raça,
+safra e região. Nas categorias Gado e Produção agrícola, filtros adicionais
+permitem combinar raça/finalidade e cultura/safra. As fotografias são ilustrativas.
+
+No navegador, Three.js desenha curvas de nível sutis nas faixas de destaque.
+O módulo carrega sob demanda, reage ao cursor e pausa fora da área visível
+ou com a aba oculta. A preferência de movimento reduzido produz uma imagem
+estática. Sem WebGL2 e nas versões nativas, a faixa usa seu fundo verde.
+Os exemplos de produção são demonstrativos e não gravam operações no banco.
 
 ## Verificações
 

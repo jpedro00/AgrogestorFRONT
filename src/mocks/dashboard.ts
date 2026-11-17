@@ -1,4 +1,5 @@
 import type { Activity, DashboardSummary } from "../types/domain";
+import { opportunities } from "./opportunities";
 export const summary: DashboardSummary = {
   activePlots: 12,
   criticalAlerts: 3,
@@ -46,7 +47,7 @@ export const adminSummary = [
   },
   {
     label: "Oportunidades",
-    value: "4",
+    value: String(opportunities.length),
     detail: "No Mercado Rural",
     icon: "storefront-outline" as const,
   },

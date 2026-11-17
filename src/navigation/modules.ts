@@ -8,6 +8,20 @@ export const farmModules: {
   permission: Permission;
 }[] = [
   {
+    id: "culturas",
+    title: "Culturas e Safras",
+    description: "Planeje os ciclos e acompanhe cada cultura.",
+    icon: "leaf-outline",
+    permission: "farm",
+  },
+  {
+    id: "rebanhos",
+    title: "Rebanhos e Raças",
+    description: "Lotes, raças e etapas da criação em um só lugar.",
+    icon: "paw-outline",
+    permission: "farm",
+  },
+  {
     id: "talhoes",
     title: "Talhões",
     description: "Um olhar sobre cada parte da sua propriedade.",
@@ -49,6 +63,12 @@ export const adminModules: {
   icon: IconName;
   group: "Gestão rural" | "AgroGestor Negócios";
 }[] = [
+  {
+    id: "rebanhos",
+    title: "Rebanhos e Raças",
+    icon: "paw-outline",
+    group: "Gestão rural",
+  },
   {
     id: "propriedades",
     title: "Propriedades",

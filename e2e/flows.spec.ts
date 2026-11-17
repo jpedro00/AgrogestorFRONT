@@ -6,6 +6,14 @@ test.beforeEach(async ({ page }) => {
   consoleIssues.set(page, issues);
   page.on("pageerror", (error) => issues.push(error.message));
   page.on("console", (message) => {
+    // Chromium can emit this GPU diagnostic when Playwright captures a WebGL canvas.
+    if (
+      message.type() === "warning" &&
+      /^\[\.WebGL-0x[0-9a-f]+\]GL Driver Message \(OpenGL, Performance, GL_CLOSE_PATH_NV, High\): GPU stall due to ReadPixels/.test(
+        message.text(),
+      )
+    )
+      return;
     if (["warning", "error"].includes(message.type()))
       issues.push(message.text());
   });
@@ -148,6 +156,13 @@ test("layout não transborda e console não apresenta erros", async ({
   const issues: string[] = [];
   page.on("pageerror", (error) => issues.push(error.message));
   page.on("console", (message) => {
+    if (
+      message.type() === "warning" &&
+      /^\[\.WebGL-0x[0-9a-f]+\]GL Driver Message \(OpenGL, Performance, GL_CLOSE_PATH_NV, High\): GPU stall due to ReadPixels/.test(
+        message.text(),
+      )
+    )
+      return;
     if (["warning", "error"].includes(message.type()))
       issues.push(message.text());
   });

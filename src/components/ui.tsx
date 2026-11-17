@@ -1,4 +1,4 @@
-import type { ComponentProps, PropsWithChildren } from "react";
+import { useState, type ComponentProps, type PropsWithChildren } from "react";
 import {
   ActivityIndicator,
   Pressable,
@@ -33,6 +33,7 @@ export function AppButton({
   loadingLabel = "Entrando…",
   disabled,
   accessibilityLabel,
+  selected,
 }: {
   title: string;
   onPress: () => void;
@@ -42,7 +43,9 @@ export function AppButton({
   loadingLabel?: string;
   disabled?: boolean;
   accessibilityLabel?: string;
+  selected?: boolean;
 }) {
+  const [hovered, setHovered] = useState(false);
   const fg =
     variant === "primary"
       ? c.surface
@@ -53,9 +56,15 @@ export function AppButton({
     <Pressable
       accessibilityRole="button"
       accessibilityLabel={accessibilityLabel ?? title}
-      accessibilityState={{ disabled: disabled || loading, busy: loading }}
+      accessibilityState={{
+        disabled: disabled || loading,
+        busy: loading,
+        selected,
+      }}
       disabled={disabled || loading}
       onPress={onPress}
+      onHoverIn={() => setHovered(true)}
+      onHoverOut={() => setHovered(false)}
       style={({ pressed }) => [
         s.button,
         variant === "primary" && { backgroundColor: c.primary },
@@ -65,6 +74,13 @@ export function AppButton({
           backgroundColor: c.surface,
         },
         { opacity: disabled ? 0.45 : pressed ? 0.75 : 1 },
+        hovered &&
+          !disabled &&
+          !loading && {
+            outlineWidth: 1,
+            outlineColor: c.primary,
+            outlineStyle: "solid",
+          },
       ]}
     >
       {loading ? (

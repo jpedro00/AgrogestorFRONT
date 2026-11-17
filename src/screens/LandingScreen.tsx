@@ -4,6 +4,8 @@ import { Screen } from "../components/Layout";
 import { AppButton, Badge, Icon, s } from "../components/ui";
 import { RuralPhoto } from "../components/RuralPhoto";
 import { colors as c } from "../theme";
+import { FieldMotion } from "../components/FieldMotion";
+import { MarketPreview } from "../components/MarketPreview";
 export default function LandingScreen() {
   const { width } = useWindowDimensions();
   const wide = width >= 850;
@@ -85,6 +87,7 @@ export default function LandingScreen() {
               gap: 9,
             }}
           >
+            <FieldMotion />
             <View style={s.row}>
               <Icon name="leaf-outline" color={c.accent} />
               <Text
@@ -113,13 +116,13 @@ export default function LandingScreen() {
         {[
           {
             icon: "leaf-outline" as const,
-            title: "Sua gestão rural",
-            body: "Propriedades, atividades e informações essenciais, mais próximas de você.",
+            title: "Uma visão de cada safra",
+            body: "Soja, milho, café e outras culturas. Explore ciclos, áreas e previsões de colheita.",
           },
           {
             icon: "storefront-outline" as const,
-            title: "Seu próximo negócio",
-            body: "Terras, animais e produção. Explore oportunidades no Mercado Rural.",
+            title: "Do corte ao leite",
+            body: "Nelore, Angus, Girolando e outras raças. Conheça os exemplos de lotes e etapas da criação.",
           },
           {
             icon: "shield-checkmark-outline" as const,
@@ -137,6 +140,7 @@ export default function LandingScreen() {
           </View>
         ))}
       </View>
+      <MarketPreview />
       <Text style={s.small}>
         AgroGestor · Protótipo funcional · Todos os dados são de demonstração.
       </Text>

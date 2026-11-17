@@ -60,7 +60,19 @@ export interface Opportunity {
   summary: string;
   price: string;
   description: string;
-  art: "land" | "cattle" | "crop" | "lease";
+  art:
+    | "land"
+    | "cattle"
+    | "crop"
+    | "lease"
+    | "soy"
+    | "coffee"
+    | "angus"
+    | "holstein";
+  crop?: string;
+  breed?: string;
+  season?: string;
+  purpose?: "Corte" | "Leite";
 }
 export type NegotiationStatus =
   "Preciso agir" | "Em andamento" | "Aguardando outra pessoa" | "Concluídos";

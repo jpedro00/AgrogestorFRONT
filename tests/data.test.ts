@@ -5,6 +5,7 @@ import {
   MarketplaceService,
   NegotiationService,
   PropertyService,
+  ProductionService,
 } from "../src/services/data";
 describe("separação dos contextos", () => {
   it.each(["comprador", "parceiro"])(
@@ -23,10 +24,26 @@ describe("separação dos contextos", () => {
   });
   it("mercado público não inclui identificadores privados da fazenda", async () => {
     const list = await MarketplaceService.list();
-    expect(list).toHaveLength(4);
+    expect(list).toHaveLength(8);
     expect(JSON.stringify(list)).not.toMatch(
       /santa-clara|propertyIds|criticalAlerts/,
     );
+  });
+  it("exemplos de produção respeitam a propriedade e as permissões", async () => {
+    const owner = users.find((u) => u.role === "proprietario_vendedor")!;
+    const production = await ProductionService.list(owner);
+    expect(production.harvests).toHaveLength(21);
+    expect(production.herds).toHaveLength(7);
+    expect(await ProductionService.list({ ...owner, propertyIds: [] })).toEqual(
+      { harvests: [], herds: [] },
+    );
+    const buyer = users.find((u) => u.role === "comprador")!;
+    expect(
+      await ProductionService.list({
+        ...buyer,
+        propertyIds: owner.propertyIds,
+      }),
+    ).toEqual({ harvests: [], herds: [] });
   });
   it("parceiro recebe somente negociação da qual participa", async () => {
     const partner = users.find((u) => u.role === "parceiro")!;

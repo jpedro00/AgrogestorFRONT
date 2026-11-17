@@ -1,11 +1,13 @@
 import { View } from "react-native";
 import { router, useLocalSearchParams } from "expo-router";
 import { Screen } from "../components/Layout";
-import { Badge, Heading, ModuleCard, s } from "../components/ui";
+import { AppButton, Badge, Heading, ModuleCard, s } from "../components/ui";
 import { EmptyState, RestrictedState } from "../components/States";
 import { farmModules } from "../navigation/modules";
 import { useAuth } from "../auth/AuthContext";
 import { canAccess } from "../auth/permissions";
+import { ProductionCatalog } from "../components/ProductionCatalog";
+import { FieldBanner } from "../components/FieldBanner";
 export default function FarmScreen() {
   const { user } = useAuth();
   return (
@@ -21,6 +23,11 @@ export default function FarmScreen() {
       ) : (
         <>
           <Badge label="Dados privados da propriedade" />
+          <FieldBanner
+            label="GESTÃO DA PROPRIEDADE"
+            title="Do plantio ao cuidado com o rebanho."
+            description="Explore safras, culturas e lotes de animais nos exemplos da plataforma."
+          />
           <View style={s.grid}>
             {farmModules
               .filter((item) => canAccess(user, item.permission))
@@ -52,15 +59,31 @@ export function FarmModuleScreen() {
         <RestrictedState onBack={() => router.replace("/fazenda")} />
       ) : (
         <>
-          <Heading eyebrow="MINHA FAZENDA" subtitle={item.description}>
-            {item.title}
-          </Heading>
-          <EmptyState
-            title="Protótipo em desenvolvimento"
-            description="Esta área está preparada para a próxima etapa. Por enquanto, nenhum registro será criado ou alterado."
-            icon={item.icon}
-            onBack={() => router.replace("/fazenda")}
-          />
+          {item.id !== "culturas" && item.id !== "rebanhos" && (
+            <Heading eyebrow="MINHA FAZENDA" subtitle={item.description}>
+              {item.title}
+            </Heading>
+          )}
+          {item.id === "culturas" || item.id === "rebanhos" ? (
+            <>
+              <ProductionCatalog
+                kind={item.id === "culturas" ? "crops" : "herds"}
+              />
+              <AppButton
+                title="Voltar"
+                variant="secondary"
+                icon="arrow-back"
+                onPress={() => router.replace("/fazenda")}
+              />
+            </>
+          ) : (
+            <EmptyState
+              title="Protótipo em desenvolvimento"
+              description="Esta área está preparada para a próxima etapa. Por enquanto, nenhum registro será criado ou alterado."
+              icon={item.icon}
+              onBack={() => router.replace("/fazenda")}
+            />
+          )}
         </>
       )}
     </Screen>

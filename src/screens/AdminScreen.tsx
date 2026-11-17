@@ -18,6 +18,7 @@ import { useAuth } from "../auth/AuthContext";
 import { useResource } from "../hooks/useResource";
 import { DashboardService } from "../services/data";
 import { adminModules } from "../navigation/modules";
+import { ProductionCatalog } from "../components/ProductionCatalog";
 export default function AdminEntryScreen() {
   const { user } = useAuth();
   if (!user) return null;
@@ -145,18 +146,26 @@ export function AdminModuleScreen() {
     <AdminLayout>
       {item ? (
         <>
-          <Heading
-            eyebrow={item.group}
-            subtitle="Área administrativa preparada para as próximas etapas."
-          >
-            {item.title}
-          </Heading>
-          <EmptyState
-            title="Protótipo em desenvolvimento"
-            description="Este módulo ainda não realiza operações. Explore o menu ou volte ao dashboard para continuar a demonstração."
-            icon={item.icon}
-            onBack={() => router.replace("/admin/dashboard")}
-          />
+          {item.id !== "culturas" && item.id !== "rebanhos" && (
+            <Heading
+              eyebrow={item.group}
+              subtitle="Área administrativa preparada para as próximas etapas."
+            >
+              {item.title}
+            </Heading>
+          )}
+          {item.id === "culturas" || item.id === "rebanhos" ? (
+            <ProductionCatalog
+              kind={item.id === "culturas" ? "crops" : "herds"}
+            />
+          ) : (
+            <EmptyState
+              title="Protótipo em desenvolvimento"
+              description="Este módulo ainda não realiza operações. Explore o menu ou volte ao dashboard para continuar a demonstração."
+              icon={item.icon}
+              onBack={() => router.replace("/admin/dashboard")}
+            />
+          )}
         </>
       ) : (
         <EmptyState

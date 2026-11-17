@@ -10,10 +10,12 @@ test('todos os shells da fazenda navegam e voltam',async({page})=>{
   await enter(page);
   await page.getByRole('button',{name:'Entrar no AgroGestor',exact:true}).click();
   await page.getByRole('button',{name:'Acesso rápido: Minha Fazenda'}).click();
-  for(const title of ['Talhões','Registrar atividade','Estoque','Alertas','Histórico']) {
+  for(const title of ['Culturas e Safras','Rebanhos e Raças','Talhões','Registrar atividade','Estoque','Alertas','Histórico']) {
     await page.getByRole('button',{name:title,exact:true}).click();
     await expect(page.getByRole('heading',{name:title,exact:true})).toBeVisible();
-    await expect(page.getByRole('heading',{name:'Protótipo em desenvolvimento'})).toBeVisible();
+    if (title === 'Culturas e Safras' || title === 'Rebanhos e Raças') {
+      await expect(page.getByText('FAZENDA SANTA CLARA · DEMONSTRAÇÃO',{exact:true})).toBeVisible();
+    } else await expect(page.getByRole('heading',{name:'Protótipo em desenvolvimento'})).toBeVisible();
     await page.getByRole('button',{name:'Voltar',exact:true}).click();
     await expect(page.getByRole('heading',{name:'Minha Fazenda',exact:true})).toBeVisible();
   }
@@ -22,11 +24,13 @@ test('todos os módulos administrativos são navegáveis',async({page})=>{
   await enter(page,'admin');
   await page.getByRole('button',{name:'Abrir Dashboard Admin'}).click();
   // Start with a module that does not duplicate a dashboard quick action.
-  for(const title of ['Talhões','Propriedades','Culturas e Safras','Atividades','Estoque','Alertas','Relatórios','Usuários e Permissões','Configurações','Marketplace','Negociações','Documentos','Crédito e Propostas','Contratos e Assinaturas']) {
+  for(const title of ['Talhões','Propriedades','Culturas e Safras','Rebanhos e Raças','Atividades','Estoque','Alertas','Relatórios','Usuários e Permissões','Configurações','Marketplace','Negociações','Documentos','Crédito e Propostas','Contratos e Assinaturas']) {
     if(test.info().project.name==='mobile')await page.getByRole('button',{name:'Abrir menu administrativo'}).click();
     await page.getByRole('button',{name:title,exact:true}).click();
     await expect(page.getByRole('heading',{name:title,exact:true})).toBeVisible();
-    await expect(page.getByRole('heading',{name:'Protótipo em desenvolvimento'})).toBeVisible();
+    if (title === 'Culturas e Safras' || title === 'Rebanhos e Raças') {
+      await expect(page.getByText('FAZENDA SANTA CLARA · DEMONSTRAÇÃO',{exact:true})).toBeVisible();
+    } else await expect(page.getByRole('heading',{name:'Protótipo em desenvolvimento'})).toBeVisible();
   }
 });
 test('comprador não vê dados privados; favoritos funcionam durante a sessão',async({page})=>{
